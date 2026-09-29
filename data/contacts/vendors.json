@@ -1,0 +1,70 @@
+{
+  "meta": {
+    "source": {
+      "sheet_id": "17F2O0fcfELgxKHQfZRLxuIK60jMmq-Ay6MNqneR2dP0",
+      "sheet_title": "Client Database — Business Card Contacts (Global Construction)",
+      "url": "https://docs.google.com/spreadsheets/d/17F2O0fcfELgxKHQfZRLxuIK60jMmq-Ay6MNqneR2dP0/edit"
+    },
+    "imported": "2026-09-29",
+    "rule": "Поставщики (vendors.json) не участвуют в продажах и рассылках."
+  },
+  "vendors": [
+    {
+      "id": "v083",
+      "kind": "vendor",
+      "company": "Sherwin-Williams",
+      "contact_name": "Melissa Snow",
+      "title": "Sales Representative, Property Maintenance",
+      "phone": "208-762-4699",
+      "fax": "208-762-4788",
+      "email": "Melissa.Snow@sherwin.com",
+      "address": "355 W. Prairie Shopping Center, Hayden, ID 83835",
+      "notes": "Cell 208-889-1934",
+      "sales_outreach": false,
+      "source": {
+        "sheet_id": "17F2O0fcfELgxKHQfZRLxuIK60jMmq-Ay6MNqneR2dP0",
+        "sheet_title": "Client Database — Business Card Contacts (Global Construction)",
+        "row": 83,
+        "url": "https://docs.google.com/spreadsheets/d/17F2O0fcfELgxKHQfZRLxuIK60jMmq-Ay6MNqneR2dP0/edit#gid=0&range=A83:I83"
+      }
+    },
+    {
+      "id": "v084",
+      "kind": "vendor",
+      "company": "HD Supply",
+      "contact_name": "Jim Varady",
+      "title": "Renovations Sales Representative, Renovations Plus",
+      "phone": "509-212-1104",
+      "fax": "",
+      "email": "james.varady@hdsupply.com",
+      "address": "3400 Cumberland Blvd. SE, Atlanta, GA 30339",
+      "notes": "Mobile number listed",
+      "sales_outreach": false,
+      "source": {
+        "sheet_id": "17F2O0fcfELgxKHQfZRLxuIK60jMmq-Ay6MNqneR2dP0",
+        "sheet_title": "Client Database — Business Card Contacts (Global Construction)",
+        "row": 84,
+        "url": "https://docs.google.com/spreadsheets/d/17F2O0fcfELgxKHQfZRLxuIK60jMmq-Ay6MNqneR2dP0/edit#gid=0&range=A84:I84"
+      }
+    },
+    {
+      "id": "v085",
+      "kind": "vendor",
+      "company": "The Home Depot",
+      "contact_name": "Stephen Magladry",
+      "title": "Millwork Specialist",
+      "phone": "425-835-7200 ext.357",
+      "fax": "",
+      "email": "Millwork_4233@homedepot.com",
+      "address": "2901 184th St SW, Lynnwood, WA 98037",
+      "notes": "Hours 9am-5pm usually Tue-Sat",
+      "sales_outreach": false,
+      "source": {
+        "sheet_id": "17F2O0fcfELgxKHQfZRLxuIK60jMmq-Ay6MNqneR2dP0",
+        "sheet_title": "Client Database — Business Card Contacts (Global Construction)",
+        "row": 85,
+        "url": "https://docs.google.com/spreadsheets/d/17F2O0fcfELgxKHQfZRLxuIK60jMmq-Ay6MNqneR2dP0/edit#gid=0&range=A85:I85"
+      }
+    }
+  ]
+}
