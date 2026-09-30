@@ -231,6 +231,9 @@ th.num{text-align:right}
 .side-pick select{font:700 15px var(--display);background:transparent;border:0;padding:2px 0;width:auto;max-width:100%;cursor:pointer}
 .quick{flex-direction:row;gap:8px;padding:0 16px 12px}
 .quick input{flex:1;min-width:0}
+.quick .mic{width:auto;flex-direction:row;gap:5px;padding:0 10px}
+.quick .mic svg{width:16px;height:16px}
+.side-mic-msg{margin:0 16px 10px}
 .side-title{display:flex;align-items:baseline;gap:8px;padding:10px 16px 6px;border-top:1px solid var(--line)}
 .side-title h3{margin:0;font:700 15px var(--display)}
 .side-title span{font-size:12.5px;color:var(--muted)}
@@ -1336,8 +1339,10 @@ function renderSide(el, d){
   if (SIDE_TAB === 'chat'){ el.innerHTML = head + meetingBody(d); const ch = document.getElementById('chat'); if (ch) ch.scrollTop = ch.scrollHeight; return; }
   el.innerHTML = head + `
     <form class="quick" id="quick" style="padding-top:12px"><label class="sr" for="quick-in">Новая задача</label>
-      <input id="quick-in" autocomplete="off" placeholder="${whole ? 'Задача — Claude сам выберет отдел…' : `Задача для «${esc(d.name)}»…`}">
+      <input id="quick-in" autocomplete="off" placeholder="${whole ? 'Задача — Claude сам выберет отдел…' : 'Задача для отдела…'}">
+      <button type="button" class="mic${REC_KEY === 'quick' ? ' on' : ''}" id="mic-quick" data-id="quick" aria-label="Зажмите и скажите задачу для отдела; отпустите — задача уйдёт в отдел" title="Зажмите и говорите">${MIC}<span>${REC_KEY === 'quick' ? 'Говорите' : 'Голосом'}</span></button>
       <button class="btn primary" type="submit">Поставить</button></form>
+    <p class="mic-msg side-mic-msg" id="mm-quick"${QUICK_MSG ? '' : ' hidden'}>${esc(QUICK_MSG || '')}</p>
     <div class="fchips" role="toolbar" aria-label="Фильтр задач">${chips.map(([k,t,n]) => `<button type="button" class="fchip${TFILTER === k ? ' on' : ''}${k === 'waiting' && n ? ' warn' : ''}" data-tf="${k}">${t} <b>${n}</b></button>`).join('')}</div>
     <ul class="tcards">${shown.map(i => cardHTML(i, whole)).join('') || `<li class="empty">${items.length ? 'Нет задач с этим статусом.' : whole ? 'Задач пока нет.' : 'У отдела пока нет задач. Поставьте задачу строкой выше.'}</li>`}</ul>
     ${d.id === 'sales' ? contactsHTML() : d.id === 'ops' ? vendorsHTML() : ''}
@@ -2059,6 +2064,7 @@ document.addEventListener('click', async e => {
     return;
   }
   if (e.target.closest('#mic-task')){ if (e.detail===0) (rec ? micStop() : micStart(TASK_MIC)); return; } // keyboard toggle
+  if (e.target.closest('#mic-quick')){ if (e.detail===0) (rec ? micStop() : micStart(QUICK_MIC)); return; }
   const ex = e.target.closest('.ex');
   if (ex){ document.getElementById('f-dept').value = ex.dataset.dept; document.getElementById('f-text').value = ex.dataset.text; document.getElementById('f-text').focus(); }
 });
@@ -2077,14 +2083,19 @@ const MIC_MSG = {
   other:'Распознавание прервалось. Попробуйте ещё раз.',
 };
 let rec = null, recText = '', pressT0 = 0, pressWasRec = false;
+var REC_KEY = null, QUICK_MSG = null;
 function approvalMic(a){
   return { key:a.id, ta:'rw-'+a.id,
     setText:t => { a.ui.text = t; }, setMsg:m => { a.ui.micMsg = m; },
     done:t => requestRewrite(a, t) };
 }
 const TASK_MIC = { key:'task', ta:'f-text', setText:() => {}, setMsg:() => {}, done:t => submitTask(t) };
-const micTarget = id => id === 'task' ? TASK_MIC : approvalMic(APPROVALS.find(x => x.id === id));
+// Department panel: the spoken task goes to the department that is open (or Claude picks one in «Весь офис»).
+const QUICK_MIC = { key:'quick', ta:'quick-in', setText:() => {}, setMsg:m => { QUICK_MSG = m; },
+  done:t => { deptSel.value = DEPTS.some(d => d.id === selected) ? selected : 'auto'; const i = document.getElementById('quick-in'); if (i) i.value = ''; submitTask(t); } };
+const micTarget = id => id === 'task' ? TASK_MIC : id === 'quick' ? QUICK_MIC : approvalMic(APPROVALS.find(x => x.id === id));
 function micUI(t, on){
+  REC_KEY = on ? t.key : null;
   const b = document.getElementById('mic-'+t.key); if (!b) return;
   b.classList.toggle('on', on); b.querySelector('span').textContent = on ? 'Говорите' : 'Зажмите';
   const ta = document.getElementById(t.ta); if (ta && on) ta.placeholder = 'Слушаю…';
