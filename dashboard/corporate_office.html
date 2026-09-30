@@ -1241,15 +1241,39 @@ function taskBody(t){
         <button type="button" class="btn" data-pass="${t.id}">Передать результат в отдел</button></div>` : ''}
   </div>`;
 }
+// Opened task card, short version: a few lines on what was done and what to do next; the whole log is behind «Подробнее».
+const TASK_FULL = new Set();
+const clip = (s, n) => { s = String(s || '').trim(); return s.length > n ? s.slice(0, n - 1).replace(/\s+\S*$/, '') + '…' : s; };
+function taskShort(t){
+  const r = t.result, last = (t.steps || []).slice(-1)[0];
+  const text = r && r.summary_ru ? r.summary_ru : t.status === 'working' && t.progress ? t.progress : last ? last.text : 'Агент ещё не начал работу.';
+  const facts = r ? [(r.findings || []).length && `найдено: ${r.findings.length}`, r.drafts && `писем на ваше «да»: ${r.drafts}`,
+    (r.handoffs_made || []).length && `передано в отделы: ${r.handoffs_made.length}`].filter(Boolean) : [];
+  return `<div class="task-body">
+    <p>${esc(clip(text, 240))}</p>
+    ${facts.length ? `<span class="hint">${esc(facts.join(' · '))}</span>` : ''}
+    <div class="tc-acts">
+      ${r && r.drafts ? `<button type="button" class="btn primary" data-go-drafts>Письма на ваше «да»: ${r.drafts}</button>` : ''}
+      ${t.status === 'review' ? `<button type="button" class="btn" data-task-close="${t.id}">Отметить выполненной</button>` : ''}
+      <button type="button" class="linkbtn" data-task-full="${t.id}">Подробнее</button></div>
+  </div>`;
+}
+// Jump from anywhere (e.g. «Отдано» on a meeting idea) to the department and open that task.
+function openTask(t){
+  select(t.dept); SIDE_TAB = 'tasks'; TFILTER = 'all'; TASK_OPEN.add(t.id);
+  renderPanel(); drawLabels();
+  const card = document.querySelector(`#panel .tc[data-id="${CSS.escape(t.id)}"]`);
+  if (card) card.scrollIntoView({ behavior:'smooth', block:'center' });
+}
 function cardHTML(i, whole){
   const d = byId[i.dept] || HQ, [cls, label] = ST[i.st], open = TASK_OPEN.has(i.id);
   return `<li class="tc${open ? ' open' : ''}${i.kind === 'queue' ? ' static' : ''}" data-tc="${i.kind}" data-id="${esc(i.id)}" style="--dc:var(${d.color})"${i.kind === 'queue' ? '' : ' tabindex="0"'}>
     <div class="tc-top"><span class="pill ${cls}">${i.st === 'doing' && i.kind === 'task' ? '<span class="spin"></span>' : ''}${label}</span>${whole ? `<span class="tc-dept">${esc(d.name)}</span>` : ''}<span class="when">${esc(i.when || '')}</span>
       <button type="button" class="tc-done" data-done="${i.kind}" data-id="${esc(i.id)}" title="Уже сделано — убрать задачу навсегда">✓ Выполнено</button></div>
     <b class="tc-title">${esc(i.title)}</b>
-    ${i.note ? `<span class="tc-note">${esc(i.note)}</span>` : ''}
+    ${i.note && !(open && i.kind === 'task') ? `<span class="tc-note">${esc(i.note)}</span>` : ''}
     ${i.st === 'doing' ? '<span class="tc-bar"><i></i></span>' : ''}
-    ${open && i.kind === 'task' ? taskBody(i.t) : ''}
+    ${open && i.kind === 'task' ? (TASK_FULL.has(i.id) ? taskBody(i.t) + `<button type="button" class="linkbtn" data-task-full="${esc(i.id)}">Свернуть подробности</button>` : taskShort(i.t)) : ''}
     ${open && i.kind === 'appr' ? `<div class="tc-acts"><button type="button" class="btn primary" data-open-appr="${esc(i.id)}">Открыть черновик</button><span class="hint">там же «Да, отправляй» и правки голосом</span></div>` : ''}
   </li>`;
 }
@@ -1483,12 +1507,12 @@ async function createTask(d, title, brief, from, extra){
     j = await r.json().catch(() => ({}));
   } catch(_) {}
   if (!r || !r.ok){ toast('Не получилось поставить задачу. Попробуйте ещё раз.'); return false; }
-  TASKS.unshift(j.task); TASK_OPEN.add(j.task.id);
+  TASKS.unshift(j.task);
   FEED.unshift([d.id, `${from || 'Вы'} → ${d.name}: ${title}`, nowHM()]);
   if (from !== 'Переговорная' && !(extra && extra.parent)) select(d.id);
   renderFeed(); loadTasks();
   toast(LOCAL && LOCAL.paused ? `Задача для «${d.name}» в очереди — начнётся, когда вы запустите агентов.` : `«${d.name}» взялся за задачу — ход работы виден на панели отдела.`);
-  return true;
+  return j.task;
 }
 
 /* ---------- Department recommendations (Claude) ---------- */
@@ -1619,13 +1643,14 @@ function saveMeeting(){
   if (!LOCAL) return;
   fetch('/api/meeting', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({ sessions: MEETING.sessions.slice(0, 12) }) }).catch(() => {});
 }
+// Only real data goes to the meeting: tasks, drafts from real mail, the client base, the inbox and Telegram.
+// The sample numbers baked into DEPTS (now / queue / metrics) and INVOICES are demo data and stay out.
 function meetingContext(){
   const dept = d => {
-    const q = LOCAL ? TASKS.filter(t => t.dept === d.id).slice(0, 4).map(t => `${t.title} (${t.status})`) : d.queue.map(x => `${x[0]} (${x[1]})`);
-    const drafts = APPROVALS.filter(a => a.dept === d.id).map(a => a.t1).slice(0, 4);
+    const q = LOCAL ? TASKS.filter(t => t.dept === d.id).slice(0, 4).map(t => `${t.title} (${t.status})`) : [];
+    const drafts = LOCAL ? APPROVALS.filter(a => a.dept === d.id).map(a => a.t1).slice(0, 4) : [];
     return `- ${d.id} · ${d.name} (${d.en}). Agents: ${d.agents.map(a => a[0] + ' — ' + a[1]).join(' | ')}
   Skills: ${skillsOf(d.id).map(k => k.title).join('; ') || 'none'}
-  Now: ${d.now}
   Tasks: ${q.join('; ') || 'none'}
   Drafts waiting for the owner: ${drafts.join('; ') || 'none'}`;
   };
@@ -1633,7 +1658,7 @@ function meetingContext(){
 ${DEPTS.map(dept).join('\n')}
 
 Client contact base (used by Sales): ${CN.clients} contacts at ${CN.properties} properties of ${CN.management_groups} management companies; ${CN.needs_review} need verification before use; suppliers are kept separate and never get sales emails.
-Overdue invoices: ${INVOICES.map(r => `${r[0]} ${r[1]} ${r[2]} $${r[3]} (${r[4]} days)`).join('; ')}
+Invoices and payments: QuickBooks data is not connected to the meeting yet — there is no list of invoices or overdue amounts, so never name invoice numbers, amounts or overdue clients.
 Recent business emails: ${INBOX.slice(0, 8).map(m => `${m.from}: ${m.subject} (${m.note})`).join('; ') || 'not loaded'}
 Recent messages in the team's Telegram group: ${TG_LOG.slice(-15).map(x => `${x.who}: ${x.text}`).join(' | ') || 'none'}`;
 }
@@ -1738,7 +1763,8 @@ function meetingBody(d){
         <input id="meet-say" autocomplete="off" placeholder="Написать агентам: например, а что с Cedar Ridge?" ${MEETING.busy ? 'disabled' : ''}><button class="btn primary" type="submit"${MEETING.busy ? ' disabled' : ''}>Отправить</button></form></div>`
     : `<p class="hint">${MEETING.busy ? '<span class="spin" style="display:inline-block;vertical-align:-2px"></span> Агенты собираются на планёрку…' : 'Планёрка начинается сама каждое утро, когда вы открываете дашборд, — или соберите агентов сейчас.'}</p>`}
     ${s0 && s0.ideas.length && !revealing ? `<div class="sec"><h3>Идеи с планёрки</h3><ul class="ideas">${s0.ideas.map((x,i) => `<li style="--dc:var(${byId[x.dept].color})"><span class="txt"><b>${esc(x.title)}</b><span>${esc(byId[x.dept].name)} · ${esc(x.why)}</span></span>
-        <button type="button" class="btn" data-idea="${i}"${x.done ? ' disabled' : ''}>${x.done ? 'Отдано' : 'В задачи'}</button></li>`).join('')}</ul></div>` : ''}
+        ${x.done ? `<button type="button" class="btn" data-idea-open="${i}" title="Открыть эту задачу в отделе «${esc(byId[x.dept].name)}»">Отдано · открыть →</button>`
+          : `<button type="button" class="btn" data-idea="${i}">В задачи</button>`}</li>`).join('')}</ul></div>` : ''}
     <div class="sec"><h3>Собрать обсуждение</h3>
       <div class="topics">${MEET_TOPICS.map(t => `<button type="button" class="ex" data-meet-topic="${esc(t)}"${MEETING.busy ? ' disabled' : ''}>${esc(t)}</button>`).join('')}</div>
       <form class="meet-form" data-meet="topic" style="margin-top:8px"><label class="sr" for="meet-topic">Своя тема</label>
@@ -1758,7 +1784,7 @@ async function ideaToTask(i, btn){
   const s0 = MEETING.sessions[0], x = s0 && s0.ideas[i]; if (!x || x.done) return;
   const d = byId[x.dept];
   btn.disabled = true;
-  if (LOCAL){ if (!(await createTask(d, x.title, x.why, 'Переговорная'))){ btn.disabled = false; return; } }
+  if (LOCAL){ const t = await createTask(d, x.title, x.why, 'Переговорная'); if (!t){ btn.disabled = false; return; } x.task_id = t.id; }
   else { d.queue.unshift([x.title, 'новая', nowHM()]); FEED.unshift([d.id, `Переговорная → ${d.name}: ${x.title}`, nowHM()]); renderFeed(); toast(`Задача добавлена в очередь «${d.name}».`); }
   x.done = true; saveMeeting();
   renderPanel();
@@ -2027,6 +2053,16 @@ document.addEventListener('click', async e => {
   if (ctf){ CT_F = ctf.dataset.ctf; renderPanel(); return; }
   const chip = e.target.closest('.dchip');
   if (chip){ select(chip.dataset.id === 'all' ? 'hq' : chip.dataset.id); return; }
+  const tFull = e.target.closest('[data-task-full]');
+  if (tFull){ const id = tFull.dataset.taskFull; TASK_FULL.has(id) ? TASK_FULL.delete(id) : TASK_FULL.add(id); renderPanel(); return; }
+  const ideaOpen = e.target.closest('[data-idea-open]');
+  if (ideaOpen){
+    const x = MEETING.sessions[0] && MEETING.sessions[0].ideas[+ideaOpen.dataset.ideaOpen]; if (!x) return;
+    const t = TASKS.find(t => t.id === x.task_id) || TASKS.find(t => t.dept === x.dept && t.title === x.title);
+    if (t) openTask(t);
+    else { select(x.dept); toast(LOCAL ? 'Эта задача уже закрыта или убрана из списка.' : `Задача в очереди отдела «${byId[x.dept].name}».`); }
+    return;
+  }
   const tBtn = e.target.closest('[data-task]');
   if (tBtn){ const id = tBtn.dataset.task; TASK_OPEN.has(id) ? TASK_OPEN.delete(id) : TASK_OPEN.add(id); renderPanel(); return; }
   const tClose = e.target.closest('[data-task-close]');
