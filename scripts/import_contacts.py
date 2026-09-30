@@ -46,6 +46,23 @@ MANUAL_REVIEW = {
 }
 FIRST_NAME_ONLY = re.compile(r'first name\b.*\bonly', re.I)
 
+# Who we have already worked with, from QuickBooks «Sales by Customer» (01.01.2020–30.09.2026).
+# Property-level matches first, then the management company as a whole. Values are the QuickBooks customer names.
+WORKED_PROPERTIES = {
+    ('Allied Residential', 'Madison at Rivers Edge'): 'Madison at Rivers Edge',
+    ('Security Properties', 'Meadowbrook'): 'Meadowbrook',
+    ('Weidner Apartment Homes', 'Foster Greens'): 'Foster Greens Apartment Homes',
+    ('King County Housing Authority', 'Management Office'): 'Housing Authority Of the King County',
+}
+WORKED_GROUPS = {
+    'Security Properties': 'Security Properties Residential LLC',
+    'Allied Residential': 'Allied Residential Inc',
+    'Coast Property Management': 'COAST Property',
+    'Weidner Apartment Homes': 'WEIDNER APARTMENT HOMES ADAGIO',
+}
+# First names that are more than one word.
+FIRST_NAMES = {'La Qwana Toles': 'La Qwana'}
+
 
 def row_url(row):
     return f'{SHEET_URL}#gid=0&range=A{row}:I{row}'
@@ -58,6 +75,22 @@ def clean(v):
 
 def source(row):
     return {'sheet_id': SHEET_ID, 'sheet_title': SHEET_TITLE, 'row': row, 'url': row_url(row)}
+
+
+def names(contact_name, prop):
+    """Display name for the To: line and the name to greet, e.g. 'Victor Ledezma, CAM' → 'Victor Ledezma', 'Victor'."""
+    if not contact_name or contact_name.startswith('('):
+        return '', f'{prop} team'
+    display = re.sub(r'\s*\(.*?\)', '', contact_name).split(',')[0].strip()
+    return display, FIRST_NAMES.get(display, display.split()[0])
+
+
+def relationship(group, prop):
+    if (group, prop) in WORKED_PROPERTIES:
+        return 'worked_property', WORKED_PROPERTIES[(group, prop)]
+    if group in WORKED_GROUPS:
+        return 'worked_company', WORKED_GROUPS[group]
+    return 'new', ''
 
 
 def review_flags(rec):
@@ -103,6 +136,8 @@ def parse(rows):
             'contact_name': cells[2], 'title': cells[3], 'phone': cells[4], 'fax': cells[5],
             'email': cells[6], 'address': cells[7], 'notes': cells[8],
         }
+        rec['display_name'], rec['first_name'] = names(rec['contact_name'], rec['property'])
+        rec['relationship'], rec['quickbooks_customer'] = relationship(rec['management_group'], rec['property'])
         rec['review_flags'] = review_flags(rec)
         rec['status'] = 'needs_review' if rec['review_flags'] else 'ok'
         rec['sales_outreach'] = True
@@ -126,7 +161,11 @@ def build(clients, vendors):
             'management_groups': len(groups),
             'properties': len({(c['management_group'], c['property']) for c in clients}),
             'vendors': len(vendors),
+            'worked_property': sum(c['relationship'] == 'worked_property' for c in clients),
+            'worked_company': sum(c['relationship'] == 'worked_company' for c in clients),
+            'new': sum(c['relationship'] == 'new' for c in clients),
         },
+        'relationship_source': 'QuickBooks · Sales by Customer · 2020-01-01…2026-09-30',
         'rules': {
             'drafts_only': 'Агенты не отправляют письма сами: черновик → правки → только после явного «да, отправляй».',
             'cite_source': 'Каждый черновик ссылается на строку таблицы, из которой взят контакт (source.url).',
@@ -140,7 +179,8 @@ def build(clients, vendors):
 def embed(page, clients, vendors, meta):
     """Replace the CONTACTS snapshot between the markers in the dashboard page."""
     slim = lambda r, keys: {k: r[k] for k in keys if r.get(k)}
-    ckeys = ['id', 'management_group', 'property', 'contact_name', 'title', 'phone', 'fax', 'email', 'address', 'notes', 'status']
+    ckeys = ['id', 'management_group', 'property', 'contact_name', 'display_name', 'first_name', 'title', 'phone', 'fax', 'email',
+             'address', 'notes', 'status', 'relationship', 'quickbooks_customer']
     vkeys = ['id', 'company', 'contact_name', 'title', 'phone', 'fax', 'email', 'address', 'notes']
     data = {
         'sheet': SHEET_URL, 'title': SHEET_TITLE, 'imported': meta['imported'], 'counts': meta['counts'],

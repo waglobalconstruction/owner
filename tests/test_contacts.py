@@ -45,6 +45,19 @@ class ImportTest(unittest.TestCase):
             ('Yarrow Wood Highlands', 'Matt'): 'surname_missing',
         })
 
+    def test_relationship(self):
+        by = lambda rel: [c for c in self.clients if c['relationship'] == rel]
+        self.assertEqual({c['property'] for c in by('worked_property')},
+                         {'Madison at Rivers Edge', 'Meadowbrook', 'Foster Greens', 'Management Office'})
+        self.assertEqual((len(by('worked_company')), len(by('new'))), (53, 21))
+        self.assertTrue(all(c['management_group'] not in import_contacts.WORKED_GROUPS for c in by('new')))
+
+    def test_names(self):
+        n = {c['contact_name']: (c['display_name'], c['first_name']) for c in self.clients}
+        self.assertEqual(n['Victor Ledezma, CAM'], ('Victor Ledezma', 'Victor'))
+        self.assertEqual(n['La Qwana Toles'], ('La Qwana Toles', 'La Qwana'))
+        self.assertEqual(n['(none listed)'], ('', 'Carriage House Apartments team'))
+
     def test_json_is_current(self):
         saved = json.loads((ROOT / 'data/contacts/clients.json').read_text(encoding='utf-8'))['clients']
         self.assertEqual(saved, self.clients, 'run scripts/import_contacts.py')

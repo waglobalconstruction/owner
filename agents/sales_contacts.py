@@ -62,7 +62,7 @@ def prepare_draft(contact_id, subject, body, dept='sales'):
         raise NotAllowed('Контакт требует проверки: ' + '; '.join(f['reason_ru'] for f in c['review_flags']))
     if not c['email']:
         raise NotAllowed('У контакта нет email.')
-    name = c['contact_name'] if not c['contact_name'].startswith('(') else c['property']
+    name = c['display_name'] or c['property']
     return {
         'dept': dept,
         'kind': 'Письмо',
