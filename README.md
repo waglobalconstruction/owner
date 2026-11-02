@@ -20,7 +20,7 @@ Source: Google Sheet «Client Database — Business Card Contacts (Global Constr
 | `data/contacts/vendors.json` | 3 material suppliers (Sherwin-Williams, HD Supply, The Home Depot) — kept apart, never used for sales or newsletters |
 | `scripts/import_contacts.py` | Rebuilds the JSON from the CSV and refreshes the snapshot inside the dashboard |
 | `agents/sales_contacts.py` | Read access for agents and `prepare_draft()` — builds a draft that cites the sheet row; there is no send |
-| `dashboard/corporate_office.html` | The Corporate Office page with the base embedded (Sales card, «База клиентов» in the Sales panel, suppliers in «Проекты и бригады») |
+| `dashboard/corporate_office.html` | The Corporate Office page. Until launch it holds a test snapshot (one test contact, one test supplier, one test task); `--embed` below puts the real base back |
 
 ### Rules the agents follow
 
