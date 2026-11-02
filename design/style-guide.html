@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Стиль Global</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="global.css">
+<style>
+/* Layout: one review column like the flyer — sky hero, then colour, type, parts, the crew app on phones, the band. */
+body{margin:0}
+.wrap{max-width:1120px;margin:0 auto;padding-block:8px 64px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:44px}
+section{display:flex;flex-direction:column;gap:18px}
+.sec-head{display:flex;flex-direction:column;gap:8px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media (max-width:860px){.grid3,.grid2{grid-template-columns:minmax(0,1fr)}}
+
+.hero{display:flex;flex-direction:column;gap:18px;padding-block:40px 44px}
+.hero .g-title{max-width:14ch}
+.hero .g-lead{max-width:52ch}
+
+.sw{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+@media (max-width:860px){.sw{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.swatch{background:var(--g-paper);border:1px solid var(--g-line);border-radius:var(--g-radius-sm);overflow:hidden;display:flex;flex-direction:column}
+.swatch i{display:block;height:72px;border-bottom:1px solid var(--g-line)}
+.swatch div{padding:10px 12px 12px;display:flex;flex-direction:column;gap:2px}
+.swatch b{font:700 14px/1.2 var(--g-display)}
+.swatch code{font:500 12px/1.3 var(--g-text);color:var(--g-muted);font-variant-numeric:tabular-nums}
+.swatch span{font-size:12.5px;color:var(--g-muted);line-height:1.35}
+
+.type-row{display:grid;grid-template-columns:160px minmax(0,1fr);gap:8px 20px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--g-line)}
+.type-row:last-child{border-bottom:0}
+.type-row .meta{font-size:12.5px;color:var(--g-muted)}
+@media (max-width:640px){.type-row{grid-template-columns:minmax(0,1fr)}}
+
+.free-chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.tiles-rule{display:flex;justify-content:space-between;font-size:12px;color:var(--g-muted);border-top:2px solid var(--g-line);padding-top:6px}
+.tiles-rule b{color:var(--g-red);font-weight:600}
+
+/* Phone mock-ups for the crew app */
+.phones{display:flex;flex-wrap:wrap;gap:28px;justify-content:center;padding:28px 12px;border-radius:calc(var(--g-radius) + 6px)}
+.phone{width:320px;max-width:100%;border-radius:38px;padding:10px;background:#0B0B0B;box-shadow:0 0 0 1px var(--g-line),var(--g-shadow-lift)}
+.screen{border-radius:30px;background:var(--g-ground);overflow:hidden;min-height:600px;display:flex;flex-direction:column}
+.screen .bar{display:flex;justify-content:space-between;align-items:center;padding:14px 18px 6px;font:600 12px/1 var(--g-text);color:var(--g-ink)}
+.screen .body{padding:8px 16px 18px;display:flex;flex-direction:column;gap:12px;flex:1}
+.screen .g-logo svg{height:56px}
+.login{justify-content:center;gap:16px;padding-top:24px}
+.check{list-style:none;margin:0;padding:0;display:flex;flex-direction:column}
+.check li{display:grid;grid-template-columns:24px minmax(0,1fr);gap:10px;padding:10px 0;border-bottom:1px solid var(--g-line);align-items:start}
+.check li:last-child{border-bottom:0}
+.check i{width:22px;height:22px;border-radius:7px;border:2px solid var(--g-line);display:grid;place-items:center;font-style:normal;font-size:13px;color:#FFFFFF}
+.check li.done i{background:var(--g-ok);border-color:var(--g-ok)}
+.check b{display:block;font-weight:600;font-size:14px;line-height:1.3}
+.check span{display:block;font-size:12.5px;color:var(--g-muted)}
+.check li.done b{color:var(--g-muted);text-decoration:line-through}
+.mock-note{text-align:center}
+
+.band-row{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px 28px}
+.band-row .right{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+@media (max-width:640px){.band-row .right{align-items:flex-start}}
+.claim{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;font-size:15px;color:var(--g-band-muted)}
+.claim .lbl{font:700 11px/1 var(--g-display);letter-spacing:.18em;text-transform:uppercase;width:120px}
+
+.rules{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:760px){.rules{grid-template-columns:minmax(0,1fr)}}
+.rules li{background:var(--g-paper);border:1px solid var(--g-line);border-radius:var(--g-radius-sm);padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+.rules li b{font:800 15px/1.25 var(--g-display)}
+.rules li span{font-size:13.5px;color:var(--g-muted)}
+</style>
+</head>
+<body class="g-page">
+<div class="wrap">
+
+  <header class="g-head">
+    <a class="g-logo" href="#" aria-label="Global Construction &amp; Remodeling">
+      <svg viewBox="0 0 120 131" role="img" aria-hidden="true">
+        <g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square" transform="translate(18.4 1.5)">
+          <path d="M2 81.25V49.25L40 28.75V81.25"/><path d="M19.25 81.25V2L56.25 25V81.25"/><path d="M50 81.25V43.75H81.25V81.25"/><path d="M67.5 33.75V65"/><path d="M2 81.25H81.25"/>
+        </g>
+        <text x="60" y="114" text-anchor="middle" textLength="112" lengthAdjust="spacingAndGlyphs" font-family="Montserrat, Arial, sans-serif" font-weight="700" font-size="25.5" fill="currentColor">GLOBAL</text>
+        <text x="60" y="128.5" text-anchor="middle" textLength="112" lengthAdjust="spacingAndGlyphs" font-family="Montserrat, Arial, sans-serif" font-weight="500" font-size="6.6" fill="currentColor">CONSTRUCTION &amp; REMODELING</text>
+      </svg>
+    </a>
+    <p class="g-tagline">Dry it<span class="g-dot">.</span> Fix it<span class="g-dot">.</span> Rent it<span class="g-dot">.</span></p>
+  </header>
+
+  <div class="g-sky peak hero">
+    <p class="g-eyebrow">Фирменный стиль Global · с 02.11.2026</p>
+    <h1 class="g-title">Один стиль для <em>всего Global.</em></h1>
+    <p class="g-lead">Офис, приложение бригад, табло и вход выглядят как наш флаер по сушке: белые карточки на небесном фоне, один красный для главного и тёмная полоса с контактами.</p>
+    <div class="row">
+      <span class="g-chain">
+        <span class="done"><i>✓</i>Флаер</span><span class="arr">→</span>
+        <span class="done"><i>✓</i>Офис</span><span class="arr">→</span>
+        <span class="on"><i>●</i>Приложение бригад</span><span class="arr">→</span>
+        <span><i>○</i>Табло и вход</span>
+      </span>
+    </div>
+  </div>
+
+  <section aria-labelledby="h-color">
+    <div class="sec-head">
+      <p class="g-eyebrow rule">Цвета</p>
+      <h2 class="g-h2" id="h-color">Белый, небо, <em>один красный</em>, графит<span class="g-dot">.</span></h2>
+      <p class="g-note">Красного на экране мало: заголовок-акцент, главная кнопка, одна карточка. Статусы (готово / ждёт / просрочено) — свои цвета, не фирменный красный.</p>
+    </div>
+    <div class="sw">
+      <div class="swatch"><i style="background:var(--g-red-fill)"></i><div><b>Красный Global</b><code>--g-red · #D90A0A</code><span>Главное действие, акцент в заголовке, карточка «FREE»</span></div></div>
+      <div class="swatch"><i style="background:var(--g-ink)"></i><div><b>Графит</b><code>--g-ink · #1B1B1B</code><span>Текст, номера шагов, тёмные кнопки</span></div></div>
+      <div class="swatch"><i style="background:var(--g-band)"></i><div><b>Полоса</b><code>--g-band · #1E1E1E</code><span>Блок с телефоном и лицензией</span></div></div>
+      <div class="swatch"><i style="background:linear-gradient(180deg,var(--g-sky-1),var(--g-sky-3))"></i><div><b>Небо</b><code>--g-sky-1…3</code><span>Фон главной панели и сцены офиса</span></div></div>
+      <div class="swatch"><i style="background:var(--g-paper)"></i><div><b>Бумага</b><code>--g-paper · #FFFFFF</code><span>Карточки</span></div></div>
+      <div class="swatch"><i style="background:var(--g-tile)"></i><div><b>Плитка</b><code>--g-tile · #EEF0F2</code><span>Серые клетки, тихие кнопки</span></div></div>
+      <div class="swatch"><i style="background:var(--g-ok)"></i><div><b>Готово</b><code>--g-ok · #1F7A4A</code><span>«Да, отправляй», выполненные пункты</span></div></div>
+      <div class="swatch"><i style="background:var(--g-warn)"></i><div><b>Ждёт</b><code>--g-warn · #9A5B00</code><span>Ждёт решения, тестовые данные</span></div></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-type">
+    <div class="sec-head">
+      <p class="g-eyebrow rule">Шрифты</p>
+      <h2 class="g-h2" id="h-type">Montserrat для заголовков, Inter для текста<span class="g-dot">.</span></h2>
+    </div>
+    <div class="g-card flat">
+      <div class="type-row"><span class="meta">Заголовок · Montserrat 900</span><span class="g-title" style="font-size:clamp(30px,5vw,48px)">Первая сушка — <em>за наш счёт.</em></span></div>
+      <div class="type-row"><span class="meta">Подзаголовок · Montserrat 800</span><span class="g-h2">Один подрядчик на весь комплекс<span class="g-dot">.</span></span></div>
+      <div class="type-row"><span class="meta">Метка · Montserrat 700, капс</span><span class="g-eyebrow">Water mitigation &amp; restoration</span></div>
+      <div class="type-row"><span class="meta">Цифры · Montserrat 900</span><span class="g-big">5 + 2</span></div>
+      <div class="type-row"><span class="meta">Текст · Inter 400–600</span><span>Вода в юните — звоните сначала нам. Мы высушим, отремонтируем и сдадим юнит под заселение.</span></div>
+      <div class="type-row"><span class="meta">Мелкий шрифт · Inter 12</span><span class="g-fine"><b>Licensed · Bonded · Insured</b> · WA Lic. CC GLOBACR761B9 · COI и W-9 по запросу</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-parts">
+    <div class="sec-head">
+      <p class="g-eyebrow rule">Детали</p>
+      <h2 class="g-h2" id="h-parts">Карточки, метки, кнопки<span class="g-dot">.</span></h2>
+      <p class="g-note">Три карточки — как на лицевой стороне флаера. Красная одна: то, что важнее всего на этом экране.</p>
+    </div>
+    <div class="grid3">
+      <div class="g-card red">
+        <p class="g-eyebrow"><span class="g-step">1</span>Ваше решение</p>
+        <span class="g-big">4</span>
+        <div class="free-chips"><span class="g-chip">Эстимейт</span><span class="g-chip">Письмо</span><span class="g-chip">Напоминание</span><span class="g-chip">Ответ</span></div>
+        <p class="g-note"><b>Черновика ждут «Да, отправляй».</b><br>Без вашего «да» ничего не уходит.</p>
+      </div>
+      <div class="g-card">
+        <p class="g-eyebrow ink"><span class="g-step">2</span>Каждая следующая сушка</p>
+        <span class="g-big">5 + 2</span>
+        <p style="margin:0;font-weight:700;font-size:17px">Дни 6 и 7 бесплатно</p>
+        <div class="g-tiles"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span class="on">6</span><span class="on">7</span></div>
+        <div class="tiles-rule"><span>Обычная цена</span><b>Бесплатно</b></div>
+      </div>
+      <div class="g-card">
+        <p class="g-eyebrow ink"><span class="g-step">3</span>По всей компании</p>
+        <span class="g-big">10<sup>th</sup></span>
+        <p style="margin:0;font-weight:700;font-size:17px">Каждая 10-я сушка бесплатно</p>
+        <ul class="g-dash"><li>Все комплексы управляющей компании</li><li><b>Не сгорает</b></li></ul>
+      </div>
+    </div>
+    <div class="row">
+      <span class="g-tagcard"><i><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2c-3 4.5-6 8-6 12a6 6 0 0 0 12 0c0-4-3-7.5-6-12z"/></svg></i><span><small>Unit 204</small><b>Сушка — бесплатно</b></span></span>
+      <span class="g-tagcard"><i class="ink"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="4" width="14" height="7" rx="1.5"/><path d="M17 7h3v5h-8v3M12 15v6"/></svg></i><span><small>Unit 312</small><b>Гипсокартон и покраска</b></span></span>
+      <span class="g-tagcard"><i class="soft"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><circle cx="7" cy="12" r="4"/><path d="M11 12h10M17 12v3M20 12v2"/></svg></i><span><small>Unit 108</small><b>Готов к заселению</b></span></span>
+    </div>
+    <div class="row">
+      <span class="g-chip ok">готово</span><span class="g-chip warn">ждёт решения</span><span class="g-chip crit">просрочено 30+ дней</span><span class="g-chip">в очереди</span><span class="g-chip red plain">новое</span>
+      <span class="g-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>до 31 декабря 2026</span>
+    </div>
+    <div class="row">
+      <button class="g-btn red" type="button">Поставить задачу</button>
+      <button class="g-btn ok" type="button">Да, отправляй</button>
+      <button class="g-btn ink" type="button">Сделать фото</button>
+      <button class="g-btn" type="button">Переписать</button>
+      <button class="g-btn ghost" type="button">Отклонить</button>
+    </div>
+    <div class="grid2">
+      <label class="g-field" for="sg-dept">Отдел
+        <select id="sg-dept"><option>Эстимейты</option><option>Продажи</option><option>Проекты и бригады</option></select>
+      </label>
+      <label class="g-field" for="sg-task">Что нужно сделать
+        <input id="sg-task" value="Эстимейт на замену ванны, Cedar Ridge #311">
+        <span class="hint">Можно голосом: зажмите микрофон и говорите</span>
+      </label>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-crew">
+    <div class="sec-head">
+      <p class="g-eyebrow rule">Приложение бригад</p>
+      <h2 class="g-h2" id="h-crew">Тот же стиль в телефоне рабочего<span class="g-dot">.</span></h2>
+      <p class="g-note">Образец, а не копия настоящих экранов: так в этом стиле выглядят вход и карточка работы. Кнопки на всю ширину и высотой под большой палец, крупные шрифты, этапы цепочкой как на флаере, пункты на английском и русском.</p>
+    </div>
+    <div class="phones g-sky">
+      <div class="phone" aria-label="Образец: экран входа">
+        <div class="screen">
+          <div class="bar"><span>9:41</span><span>Global · бригады</span></div>
+          <div class="body login">
+            <span class="g-logo" style="align-self:center"><svg viewBox="0 0 120 131" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="square" transform="translate(18.4 1.5)"><path d="M2 81.25V49.25L40 28.75V81.25"/><path d="M19.25 81.25V2L56.25 25V81.25"/><path d="M50 81.25V43.75H81.25V81.25"/><path d="M67.5 33.75V65"/><path d="M2 81.25H81.25"/></g><text x="60" y="114" text-anchor="middle" textLength="112" lengthAdjust="spacingAndGlyphs" font-family="Montserrat, Arial, sans-serif" font-weight="700" font-size="25.5" fill="currentColor">GLOBAL</text><text x="60" y="128.5" text-anchor="middle" textLength="112" lengthAdjust="spacingAndGlyphs" font-family="Montserrat, Arial, sans-serif" font-weight="500" font-size="6.6" fill="currentColor">CONSTRUCTION &amp; REMODELING</text></svg></span>
+            <p class="g-eyebrow" style="justify-content:center">Для бригад · Crew</p>
+            <h3 class="g-h2" style="text-align:center">Вход<span class="g-dot">.</span></h3>
+            <label class="g-field" for="sg-name">Имя / Name<input id="sg-name" placeholder="Например, Андрей"></label>
+            <label class="g-field" for="sg-pin">PIN-код<input id="sg-pin" inputmode="numeric" placeholder="••••"></label>
+            <button class="g-btn red big" type="button">Войти</button>
+            <p class="g-fine" style="text-align:center">Нет доступа? Позвоните в офис<br><b>(425) 683-3109</b></p>
+          </div>
+        </div>
+      </div>
+      <div class="phone" aria-label="Образец: карточка работы бригады">
+        <div class="screen">
+          <div class="bar"><span>9:41</span><span class="g-chip ok">Бригада A</span></div>
+          <div class="body">
+            <p class="g-eyebrow">Сегодня · день 3 из 5</p>
+            <div class="g-tiles"><span class="done">1</span><span class="done">2</span><span class="on">3</span><span>4</span><span>5</span></div>
+            <span class="g-tagcard" style="align-self:flex-start"><i class="ink"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M4 21V9l8-5 8 5v12M9 21v-6h6v6"/></svg></i><span><small>Unit 214</small><b>Cedar Ridge · ремонт</b></span></span>
+            <span class="g-chain" style="border-radius:18px">
+              <span class="done"><i>✓</i>Демонтаж</span><span class="arr">→</span><span class="on"><i>2</i>Гипсокартон</span><span class="arr">→</span><span><i>3</i>Покраска</span>
+            </span>
+            <div class="g-card" style="padding:14px 16px;gap:4px">
+              <ul class="check">
+                <li class="done"><i>✓</i><div><b>Hang drywall</b><span>Повесить гипсокартон</span></div></li>
+                <li><i></i><div><b>Tape &amp; mud</b><span>Лента и шпаклёвка</span></div></li>
+                <li><i></i><div><b>Texture to match</b><span>Текстура как на стенах</span></div></li>
+              </ul>
+            </div>
+            <button class="g-btn ink big" type="button">Сделать фото</button>
+            <button class="g-btn red big" type="button">Этап готов</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="g-fine mock-note">Пример данных: бригада A, Cedar Ridge #214, как в тестовом офисе.</p>
+  </section>
+
+  <section aria-labelledby="h-band">
+    <div class="sec-head">
+      <p class="g-eyebrow rule">Тёмная полоса</p>
+      <h2 class="g-h2" id="h-band">Контакты и лицензия — внизу каждого экрана<span class="g-dot">.</span></h2>
+    </div>
+    <div class="g-band">
+      <div class="band-row">
+        <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+          <p class="g-eyebrow">Wet unit? Call us first.</p>
+          <p class="g-h2" style="color:var(--g-band-ink)">Put Global on your vendor list today<span style="color:#FF5A50">.</span></p>
+          <p class="g-fine"><b>Licensed · Bonded · Insured</b> · WA Lic. CC GLOBACR761B9 · COI and W-9 on request</p>
+        </div>
+        <div class="right"><span class="g-phone">(425) 683-3109</span><span style="font-weight:500">wa.globalconstruction@gmail.com</span></div>
+      </div>
+      <hr>
+      <div class="claim"><span class="lbl">How to claim</span><span>Do any job with us</span><span class="g-date"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>by December 31, 2026</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-rules">
+    <div class="sec-head">
+      <p class="g-eyebrow rule">Правила</p>
+      <h2 class="g-h2" id="h-rules">Чтобы всё было похоже<span class="g-dot">.</span></h2>
+    </div>
+    <ul class="rules">
+      <li><b>Один красный на экран</b><span>Красная одна главная кнопка и одна главная карточка. Остальное — графит и белое.</span></li>
+      <li><b>Красная точка в заголовке</b><span>«Corporate Office<span class="g-dot">.</span>», «Вход<span class="g-dot">.</span>» — как «Dry it. Fix it. Rent it.» на флаере.</span></li>
+      <li><b>Метки капсом над заголовком</b><span>Montserrat 700, разрядка, красным на главной панели и графитом в карточках.</span></li>
+      <li><b>Номер лицензии в рекламе</b><span>CC GLOBACR761B9 — в тёмной полосе. Закон штата требует его в любой рекламе (RCW 18.27.100).</span></li>
+      <li><b>Без чужих марок</b><span>Никаких Space Needle и настоящих зданий в картинках: гора, лес, придуманный город.</span></li>
+      <li><b>Статусы отдельно от бренда</b><span>Готово — зелёный, ждёт — жёлтый, просрочено — тёмно-красный. Фирменный красный — для главного действия.</span></li>
+    </ul>
+  </section>
+
+</div>
+</body>
+</html>

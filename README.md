@@ -2,6 +2,12 @@
 
 Data and agent helpers for the Corporate Office dashboard.
 
+## Design
+
+Every screen follows the Global brand style taken from the October 2026 drying flyer: white cards on a sky
+background, one red for the main action, a charcoal contact band, Montserrat + Inter. The kit, logo, style
+guide and the steps for moving the style to the live office and crew app on the Mac are in [`design/`](design/README.md).
+
 ## Client contact base
 
 Source: Google Sheet «Client Database — Business Card Contacts (Global Construction)»
