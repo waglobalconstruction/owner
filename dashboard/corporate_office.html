@@ -557,8 +557,8 @@ textarea{min-height:84px;resize:vertical}
       </div>
     </div>
     <div class="top-meta">
-      <span class="chip test" id="data-chip" title="Фаза 1: все цифры и письма — примеры. Живые данные подключаются в фазе 2.">Тестовые данные · фаза 1</span>
-      <span class="chip"><span class="dot ok"></span>Данные на <span class="mono" id="asof">22.09, 14:05</span></span>
+      <span class="chip test" id="data-chip" title="Тестовых данных нет. Настоящие задачи, письма и цифры появятся после запуска агентов.">Офис очищен · ждёт запуска</span>
+      <span class="chip"><span class="dot"></span>Агенты не запущены</span>
       <span class="chip">Режим: черновик → правки → «да, отправляй»</span>
     </div>
   </header>
@@ -600,10 +600,10 @@ textarea{min-height:84px;resize:vertical}
   </section>
 
   <section class="summary" aria-label="Сводка">
-    <div class="sum pending"><b id="s-pending">4</b><span>черновика ждут вашего решения</span></div>
-    <div class="sum alert"><b>$20,350</b><span>просрочено 14+ дней · 4 счёта</span></div>
-    <div class="sum"><b>9</b><span>непрочитанных писем · 3 запроса на эстимейт</span></div>
-    <div class="sum"><b>2 / 3</b><span>бригады на объектах сегодня</span></div>
+    <div class="sum pending"><b id="s-pending">1</b><span>ждут вашего решения · сейчас только тестовая задача</span></div>
+    <div class="sum"><b>—</b><span>просроченных счетов · QuickBooks подключится при запуске</span></div>
+    <div class="sum"><b>—</b><span>непрочитанных писем · Gmail подключится при запуске</span></div>
+    <div class="sum"><b>—</b><span>бригад на объектах сегодня</span></div>
   </section>
 
   <section class="office">
@@ -638,7 +638,7 @@ textarea{min-height:84px;resize:vertical}
       </div>
       <div class="loop" aria-label="Цикл подтверждения"><b>Черновик + исходники</b>→<b>Правка голосом или текстом</b>→<b>Новая версия вам</b>↺<span>…пока не</span><b>Да, отправляй</b>→<b>Отправка и отчёт</b></div>
       <div class="dfilter" id="dfilter" role="toolbar" aria-label="Показать черновики отдела"></div>
-      <p class="hint" id="src-hint">Ссылки на исходники в фазе 1 тестовые: откроют Gmail / Drive / QuickBooks, но не конкретное письмо. С фазы 2 — прямые ссылки.</p>
+      <p class="hint" id="src-hint">Сейчас здесь одна тестовая задача. Настоящие черновики со ссылками на письма появятся, когда запустим агентов и подключим Gmail.</p>
       <div class="appr" id="approvals"></div>
     </div>
     <div class="card">
@@ -686,7 +686,7 @@ textarea{min-height:84px;resize:vertical}
   <section class="card">
     <div class="card-h">
       <h2>Лента событий</h2>
-      <p>Сегодня, 22 сентября</p>
+      <p>Здесь будет всё, что сделали агенты</p>
     </div>
     <ul class="list feed" id="feed"></ul>
   </section>
@@ -704,8 +704,8 @@ textarea{min-height:84px;resize:vertical}
       </div>
     </div>
     <div class="foot-notes">
-      <span>Фаза 1 — каркас интерфейса. Суммы, счета и письма-примеры — тестовые. База клиентов в «Продажах» — настоящая, из Google Sheet визиток.</span>
-      <span>Далее: фаза 2 — живые данные из Gmail, Google Drive и QuickBooks</span>
+      <span>Офис очищен перед запуском: одна тестовая задача в «Продажах», остального нет. База клиентов в «Продажах» — настоящая, из Google Sheet визиток.</span>
+      <span>После запуска агентов: задачи, письма и цифры из Gmail, Google Drive и QuickBooks</span>
     </div>
   </footer>
 </div>
@@ -726,137 +726,92 @@ const DEPTS = [
     agents:[['Prospecting','Ищет комплексы Northside / Eastside, управляющие компании, новые multi-family, недавно проданные комплексы, renovation permits и regional maintenance managers; убирает дубликаты'],
       ['Outreach','Пишет персональное письмо каждому комплексу, прикладывает capability statement, ведёт серию follow-up, отмечает ответы и отказы. Массовой отправки без вашего разрешения нет'],
       ['Lead & Follow-up','Ни один клиент не теряется: follow-up по эстимейту через 1–3 дня, напоминает о давно молчащих менеджерах и поводах поздравить']],
-    status:'warn', statusText:'Ждёт подтверждения',
-    now:'Готовит ответ Security Properties: 6 unit turns в октябре, Harbor Pointe',
-    metrics:[['4','новых запроса сегодня'],['12','лидов в работе'],['8','новых комплексов найдено']],
-    card:[['Запросы сегодня','4'],['Лиды в работе','12']],
-    queue:[
-      ['Ответ Security Properties — 6 unit turns, октябрь','черновик','11:40'],
-      ['Квалифицировать лид: Avenue 5, Juniper Court (140 юнитов)','в работе','13:10'],
-      ['Проверить 8 комплексов Bellevue/Kirkland по базе Drive','очередь','—'],
-    ],
+    status:'idle', statusText:'Ждёт запуска',
+    now:'Ждёт запуска агентов',
+    metrics:[['—','новых запроса сегодня'],['—','лидов в работе'],['—','новых комплексов найдено']],
+    card:[['—','4'],['—','12']],
+    queue:[],
     skills:['Ищет новые комплексы и управляющие компании в районе Сиэтла','Готовит персональные письма и follow-up — отправка только после вашего «да»','Следит, чтобы ни один лид и отправленный эстимейт не остались без ответа',
       `Берёт контакты из базы клиентов (${CN.clients} визиток): каждое письмо — черновик со ссылкой на строку таблицы; контакты «требует проверки» и поставщиков не использует`],
-    src:'Gmail · Telegram · База клиентов (Google Sheet)',
-    extra:'pipeline' },
+    src:'Gmail · Telegram · База клиентов (Google Sheet)' },
   { id:'mail', name:'Почта и Telegram', en:'Inbox & Telegram', color:'--c-mail',
     agents:[['Email Manager','Читает письма менеджеров и определяет тип и срочность: новая заявка, emergency, изменение scope, просьба прислать фото, вопрос по срокам, жалоба. Передаёт в нужный отдел'],
       ['Telegram-бот','Связь с бригадами и администратором, текст и голосовые']],
-    status:'ok', statusText:'Работает',
-    now:'Разбирает входящие: 9 непрочитанных, 3 — запросы на эстимейт',
-    metrics:[['9','непрочитанных писем'],['17','сообщений в группе'],['11','ответов бота']],
-    card:[['Непрочитанные','9'],['Ответы бота','11 / 17']],
-    queue:[
-      ['Черновик ответа на жалобу — Ally Residential, Northgate Flats #220','черновик','12:55'],
-      ['Передать в тех. отдел 3 запроса на эстимейт','передано','13:02'],
-      ['Передать в финансы 3 письма по счетам','передано','13:03'],
-    ],
+    status:'idle', statusText:'Ждёт запуска',
+    now:'Ждёт запуска агентов',
+    metrics:[['—','непрочитанных писем'],['—','сообщений в группе'],['—','ответов бота']],
+    card:[['—','9'],['—','11 / 17']],
+    queue:[],
     skills:['Читает почту и определяет тип и срочность: заявка, emergency, scope, фото, сроки, жалоба','Передаёт письмо в нужный отдел и готовит черновик ответа','Отвечает администратору в рабочей Telegram-группе'],
-    src:'Gmail · Telegram Bot API · Price Book (draft)',
-    extra:'inbox' },
+    src:'Gmail · Telegram Bot API · Price Book (draft)' },
   { id:'tech', name:'Эстимейты', en:'Estimating & Change Orders', color:'--c-tech',
     agents:[['Estimate','Описание, фото и размеры → labor, материалы, disposal, delivery, markup по нашему прайсу; эстимейт в QuickBooks, add-ons, сравнение с прошлыми проектами и рынком Сиэтла — «слишком дёшево / дорого»'],
       ['Change Order','Фиксирует исходный scope и фото новых повреждений, описывает причину доп. работ, считает цену, готовит change order на подпись']],
-    status:'warn', statusText:'Ждёт подтверждения',
-    now:'Сверяет EST-2291 (замена душевой, Harbor Pointe #117) с Price Book',
-    metrics:[['3','эстимейта в черновике'],['5','ждут ответа клиента'],['2','одобрены — в расписание']],
-    card:[['Черновики','3'],['В расписание','2']],
-    queue:[
-      ['EST-2291 — замена душевой, Harbor Pointe #117','на проверке','13:20'],
-      ['CO-014 — гниль под ванной, Cedar Ridge #214: доп. работы','черновик','12:40'],
-      ['EST-2284, EST-2279 одобрены — переданы в «Проекты и бригады»','передано','—'],
-    ],
+    status:'idle', statusText:'Ждёт запуска',
+    now:'Ждёт запуска агентов',
+    metrics:[['—','эстимейта в черновике'],['—','ждут ответа клиента'],['—','одобрены — в расписание']],
+    card:[['—','3'],['—','2']],
+    queue:[],
     skills:['Считает эстимейт по Price Book: labor, материалы, disposal, delivery, markup','Сравнивает цену с прошлыми проектами и рынком — предупреждает «слишком дёшево / дорого»','Предлагает add-ons','Готовит change order при скрытых повреждениях'],
     src:'Drive: Price Book · шаблоны эстимейтов · QuickBooks Estimates' },
   { id:'fin', name:'Инвойсы и платежи', en:'Billing · QuickBooks', color:'--c-fin',
     agents:[['Invoice & Payment','Проверяет, что проект закрыт, формирует инвойс с фото и документами, отправляет после вашего «да». Следит за сроками, напоминает о просрочке, считает долг по каждому комплексу. Синхронизирует QuickBooks ↔ Google Таблицы']],
-    status:'crit', statusText:'Есть просрочка 30+',
-    now:'Подготовил 3 напоминания по счетам с просрочкой 14 и 30 дней',
-    metrics:[['$48,720','дебиторка всего'],['$20,350','просрочено 14+ дней'],['3','напоминания готовы']],
-    card:[['Просрочка 14+','$7,950'],['Просрочка 30+','$12,400']],
-    queue:[
-      ['Напоминание 30 дней — INV-1041, Coast PM','черновик','12:10'],
-      ['Напоминание 30 дней — INV-1044, Security Properties','черновик','12:12'],
-      ['Напоминание 14 дней — INV-1049, Avenue 5','черновик','12:14'],
-      ['INV-1052 достигнет 14 дней — подготовить завтра','очередь','23.09'],
-    ],
+    status:'idle', statusText:'Ждёт запуска',
+    now:'Ждёт запуска агентов',
+    metrics:[['—','дебиторка всего'],['—','просрочено 14+ дней'],['—','напоминания готовы']],
+    card:[['—','$7,950'],['—','$12,400']],
+    queue:[],
     skills:['Формирует инвойс по закрытому проекту с фото и документами','Мониторит QuickBooks AR aging, замечает просрочку 14 и 30 дней','Готовит письма-напоминания клиентам','Сверяет платежи QuickBooks ↔ Google Таблицы'],
-    src:'QuickBooks · AR aging · Google Таблицы',
-    extra:'aging' },
+    src:'QuickBooks · AR aging · Google Таблицы' },
   { id:'design', name:'Дизайн и маркетинг', en:'Design & Marketing', color:'--c-design',
     agents:[['Design','Презентации для новых комплексов, capability statement, еженедельная рассылка, слайды «до / после» из фото бригад']],
-    status:'ok', statusText:'Работает',
-    now:'Собирает рассылку №12 — готово 6 из 10 слайдов',
-    metrics:[['25.09','отправка рассылки'],['99','получателей'],['38%','открытий в прошлый раз']],
-    card:[['Рассылка №12','6 / 10'],['Отправка','пт 25.09']],
-    queue:[
-      ['Слайды «До / после»: Lakeview Commons #3B','в работе','13:35'],
-      ['Подобрать 3 кейса по замене душевых','в работе','—'],
-      ['Отдать рассылку на подтверждение','очередь','24.09'],
-    ],
+    status:'idle', statusText:'Ждёт запуска',
+    now:'Ждёт запуска агентов',
+    metrics:[['—','отправка рассылки'],['—','получателей'],['—','открытий в прошлый раз']],
+    card:[['—','6 / 10'],['—','пт 25.09']],
+    queue:[],
     skills:['Еженедельно готовит презентацию-напоминание о компании','Рассылка текущим и потенциальным клиентам','Capability statement и презентации для отдела продаж'],
-    src:'Drive: фото объектов · список контактов',
-    extra:'issue' },
+    src:'Drive: фото объектов · список контактов' },
 
   { id:'bids', name:'Тендеры', en:'Bids & RFQ', color:'--c-bids',
     agents:[['Bid & RFQ','Читает RFQ, scope и приложения: требования, обязательные документы, дедлайны, вопросы заказчику, чек-лист перед подачей. Мониторит сайты King County и других округов, проекты на стадии планирования и бюджета']],
-    status:'warn', statusText:'Дедлайн через 6 дней',
-    now:'Разбирает RFQ King County Housing Authority — interior renovation, 48 юнитов',
-    metrics:[['2','RFQ в работе'],['30.09','ближайший дедлайн'],['5','проектов на стадии бюджета']],
-    card:[['RFQ в работе','2'],['Дедлайн','30.09']],
-    queue:[
-      ['KCHA — interior renovation 48 units: список документов и вопросов','в работе','11:05'],
-      ['Snohomish County — roofing, 3 здания: проверить требования к лицензии','очередь','—'],
-      ['Обзор бюджетов округов на 2027: multi-family renovation','очередь','—'],
-    ],
+    status:'idle', statusText:'Ждёт запуска',
+    now:'Ждёт запуска агентов',
+    metrics:[['—','RFQ в работе'],['—','ближайший дедлайн'],['—','проектов на стадии бюджета']],
+    card:[['—','2'],['—','30.09']],
+    queue:[],
     skills:['Читает RFQ и приложения, выделяет требования и дедлайны','Составляет список документов и вопросов заказчику','Проверяет заявку перед подачей — ничего не упущено','Мониторит King County и другие округа, проекты на стадии бюджета'],
-    src:'Сайты King / Snohomish / Pierce County · Drive: тендерная папка',
-    extra:'bids' },
+    src:'Сайты King / Snohomish / Pierce County · Drive: тендерная папка' },
   { id:'ops', name:'Проекты и бригады', en:'Projects & Field Ops', color:'--c-ops',
     agents:[['Project Coordinator','После одобрения эстимейта создаёт проект: объект, юнит, scope, даты, бригада, материалы, доступ и ключи. Вечером отправляет бригаде план на завтра'],
       ['Daily Field Report','Текст или голосовое из Telegram → отчёт: сделано, осталось, фото до/после, проблемы, материалы, дата завершения. Обновляет CRM и готовит апдейт менеджеру'],
       ['Закупки','Список материалов на завтра по всем объектам, где дешевле, доставка на объект; чеки — в бухгалтерию']],
-    status:'ok', statusText:'2 бригады на объектах',
-    now:'Готовит вечерний план бригадам на 25.09 и список материалов',
-    metrics:[['5','активных проектов'],['2 / 3','бригады на объектах'],['1','отчёт ждёт фото']],
-    card:[['Активные проекты','5'],['Бригады','2 / 3']],
-    queue:[
-      ['EST-2284 — замена ванны, Cedar Ridge #311: создать проект, поставить бригаду C','в работе','13:40'],
-      ['EST-2279 — 2 unit turns, Security Properties: даты и доступ','очередь','—'],
-      ['План на 25.09 бригадам A и B + список материалов','очередь','19:00'],
-    ],
+    status:'idle', statusText:'Ждёт запуска',
+    now:'Ждёт запуска агентов',
+    metrics:[['—','активных проектов'],['—','бригады на объектах'],['—','отчёт ждёт фото']],
+    card:[['—','5'],['—','2 / 3']],
+    queue:[],
     skills:['Создаёт проект после одобрения эстимейта: scope, даты, бригада, доступ и ключи','Вечером отправляет бригаде план на завтра','Превращает сообщения и голосовые бригады в отчёт и апдейт менеджеру','Собирает список материалов на завтра'],
-    src:'Telegram-группа бригад · Google Таблицы (CRM) · Drive: фото объектов',
-    extra:'crews' },
+    src:'Telegram-группа бригад · Google Таблицы (CRM) · Drive: фото объектов' },
   { id:'acct', name:'Бухгалтерия', en:'Accounting & Profit', color:'--c-acct',
     agents:[['Profitability','Реальная прибыль по проекту: оплата − материалы − labor − субподрядчики. Самые прибыльные комплексы, где недооценили labor, средняя маржа'],
       ['Расходы и субподрядчики','Разносит чеки и счета поставщиков, оплаты субподрядчикам и рабочим, сверка банка с QuickBooks, отчёт за месяц']],
-    status:'ok', statusText:'Работает',
-    now:'Считает прибыль по проектам, закрытым в сентябре',
-    metrics:[['31%','средняя маржа, сентябрь'],['$18,420','прибыль за сентябрь'],['7','чеков не разнесено']],
-    card:[['Маржа','31%'],['Чеки','7']],
-    queue:[
-      ['Прибыль по 9 проектам сентября','в работе','12:30'],
-      ['Разнести 7 чеков Home Depot в QuickBooks','очередь','—'],
-      ['Labor на unit turns выше эстимейта на 18% — разобрать причины','очередь','—'],
-    ],
+    status:'idle', statusText:'Ждёт запуска',
+    now:'Ждёт запуска агентов',
+    metrics:[['—','средняя маржа, сентябрь'],['—','прибыль за сентябрь'],['—','чеков не разнесено']],
+    card:[['—','31%'],['—','7']],
+    queue:[],
     skills:['Считает реальную прибыль по каждому проекту','Показывает самые прибыльные комплексы и где недооценили labor','Разносит расходы и оплаты субподрядчикам','Отчёт за месяц'],
-    src:'QuickBooks · Google Таблицы · чеки поставщиков',
-    extra:'profit' },
+    src:'QuickBooks · Google Таблицы · чеки поставщиков' },
   { id:'comp', name:'Документы и безопасность', en:'Safety & Compliance', color:'--c-comp',
     agents:[['Safety & Compliance','Лицензии, страховки, W-9, сертификаты, сроки продления, incident reports, требования каждой управляющей компании, документы субподрядчиков. Предупреждает за 30 дней до истечения']],
-    status:'warn', statusText:'Истекает 1 документ',
-    now:'COI для Avenue 5 истекает 15.10 — готовит запрос страховому агенту',
-    metrics:[['14','документов на учёте'],['1','истекает за 30 дней'],['0','открытых инцидентов']],
-    card:[['Документы','14'],['Истекает','1']],
-    queue:[
-      ['COI для Avenue 5 — продление до 15.10','черновик','10:20'],
-      ['W-9 для Security Properties — отправить обновлённый','очередь','—'],
-      ['Проверить страховки 2 субподрядчиков','очередь','—'],
-    ],
+    status:'idle', statusText:'Ждёт запуска',
+    now:'Ждёт запуска агентов',
+    metrics:[['—','документов на учёте'],['—','истекает за 30 дней'],['—','открытых инцидентов']],
+    card:[['—','14'],['—','1']],
+    queue:[],
     skills:['Ведёт лицензии, страховки, W-9, сертификаты и сроки продления','Хранит требования каждой управляющей компании','Incident reports','Документы субподрядчиков'],
-    src:'Drive: папка документов · письма страхового агента',
-    extra:'docs' },
+    src:'Drive: папка документов · письма страхового агента' },
 ];
 const HQ = { id:'hq', name:'Кабинет владельца', en:'Owner · HQ', color:'--c-hq',
   agents:[['Executive Assistant','Личный AI-менеджер: активные проекты, кто где работает сегодня, просроченные инвойсы, что купить на завтра, сколько заработали за месяц']] };
@@ -864,120 +819,50 @@ const MEET = { id:'meet', name:'Переговорная', en:'Meeting room', co
 const DATA = { id:'data', name:'Серверная', en:'Data sources', color:'--c-data' };
 
 const SOURCES = [
-  { n:'Gmail', d:'рабочая почта, запросы клиентов', st:'ok', t:'синхр. 12 мин назад' },
-  { n:'Google Drive', d:'клиенты, эстимейты, Price Book (draft)', st:'ok', t:'синхр. 12 мин назад' },
-  { n:'QuickBooks', d:'счета, AR aging', st:'ok', t:'синхр. 47 мин назад' },
+  { n:'Gmail', d:'рабочая почта, запросы клиентов', st:'idle', t:'подключится при запуске' },
+  { n:'Google Drive', d:'клиенты, эстимейты, Price Book (draft)', st:'idle', t:'подключится при запуске' },
+  { n:'QuickBooks', d:'счета, AR aging', st:'idle', t:'подключится при запуске' },
   { n:'Telegram', d:'бот для задач с телефона', st:'idle', t:'не подключён' },
   { n:'База клиентов', d:`Google Sheet «визитки»: ${CN.clients} контактов, ${CN.vendors} поставщика отдельно`, st:'ok', t:`импорт ${importedOn}` },
 ];
 
-const INVOICES = [
-  ['INV-1041','Coast Property Management','Lakeview Commons #3B · water damage',7200,34],
-  ['INV-1044','Security Properties','Harbor Pointe #412 · unit renovation',5200,31],
-  ['INV-1049','Avenue 5','Cedar Ridge #108 · shower replacement',4850,17],
-  ['INV-1052','Ally Residential','Northgate Flats #220 · mitigation',3100,15],
-  ['INV-1055','Avenue 5','Cedar Ridge #305 · tub replacement',1900,9],
-];
+const INVOICES = [];   // real invoices come from QuickBooks once the agents are started
 
 /* Each proposal carries its source material (direct links) and a version history.
    Loop: draft → you ask for a rewrite → agent regenerates → back to you … until «Да, отправляй». */
 const GM = id => `https://mail.google.com/mail/u/0/#all/${id}`;
+// Office cleared before launch (02.11.2026): one test draft to click through. On the local server the real
+// drafts from Gmail replace this list; in the test office «Да, отправляй» never sends anything.
 let APPROVALS = [
-  { id:'a1', dept:'fin', kind:'Письмо', t1:'Напоминание об оплате — 30 дней', t2:'INV-1041 · Coast Property Management · Lakeview Commons #3B', amt:'$7,200',
-    to:'Dana Whitfield <ap@coastpm.example>',
+  { id:'test-1', dept:'sales', kind:'Письмо', t1:'Тестовая задача — нажмите и попробуйте', t2:'Тест · можно открыть, переписать, перевести, подтвердить — никуда не уходит', amt:'—',
+    to:'Тестовый получатель <test@example.com>',
     sources:[
-      {type:'QuickBooks', title:'Счёт INV-1041 · $7,200 · выставлен 19.08', meta:'просрочка 34 дня', url:'https://app.qbo.intuit.com/app/invoice?txnId=1041'},
-      {type:'Gmail', title:'«Invoice INV-1041 — friendly reminder»', meta:'наше письмо 05.09, ответа нет', url:GM('18f2c41a9b0d1041'), quote:'Hi Dana, just a friendly reminder that invoice INV-1041 is now 14 days past due…'},
+      {type:'Тест', title:'База клиентов — пример исходника', meta:'у настоящих задач здесь будет письмо, эстимейт или счёт', url:CONTACTS.sheet},
     ],
-    versions:[{text:`To: ap@coastpm.example
-Subject: Invoice INV-1041 — 30 days past due
+    versions:[{text:`To: test@example.com
+Subject: Test — Global Corporate Office
 
-Hi Dana,
+Hi,
 
-Following up on invoice INV-1041 ($7,200.00) for water damage
-restoration at Lakeview Commons, unit 3B. The invoice is now
-34 days past due.
-
-Could you confirm the payment status or let us know if anything
-is holding it up? Happy to resend the invoice or lien waiver.
+This is a test draft. Open it, ask for a rewrite by voice or
+text, translate it, then press «Да, отправляй».
+Nothing leaves the test office.
 
 Thank you,
-Global Construction`, note:'первый черновик', at:'12:10'}] },
-
-  { id:'a2', dept:'tech', kind:'Эстимейт', t1:'Эстимейт EST-2291 — замена душевой', t2:'Security Properties · Harbor Pointe #117', amt:'$5,640',
-    to:'Marcus Lee <maintenance@secprop.example>',
-    sources:[
-      {type:'Gmail', title:'«Shower replacement — Harbor Pointe #117»', meta:'запрос клиента 21.09, 16:42', url:GM('18f2d77c3e5a2291'), quote:'Resident reports a crack in the shower pan and a leaking valve. Can you quote a full replacement?'},
-      {type:'Google Drive', title:'Price Book — Global Construction (draft)', meta:'раздел Showers & Tubs', url:'https://docs.google.com/spreadsheets/d/1PriceBookDraft/edit#gid=0'},
-      {type:'Google Drive', title:'EST-2291 — черновик эстимейта', meta:'по шаблону Estimate v3', url:'https://docs.google.com/document/d/1EST2291Draft/edit'},
-    ],
-    versions:[{text:`EST-2291 · Harbor Pointe #117 · Shower replacement
-
-Demo existing surround & pan ............ $  620
-Fiberglass shower pan 60" + install ..... $1,480
-Surround kit, 3-piece ................... $1,150
-Valve & trim replacement ................ $  890
-Backer board, waterproofing ............. $  760
-Caulk, cleanup, haul-away ............... $  740
-                                          ------
-Total                                     $5,640
-Lead time: 3 working days after approval`, note:'первый черновик', at:'13:20'}] },
-
-  { id:'a3', dept:'sales', kind:'Письмо', t1:'Ответ на запрос — 6 unit turns', t2:'Security Properties · Harbor Pointe · октябрь', amt:'—',
-    to:'Marcus Lee <maintenance@secprop.example>',
-    sources:[
-      {type:'Gmail', title:'«October unit turns — Harbor Pointe»', meta:'входящее 22.09, 09:14', url:GM('18f2e01b77c4a3a3'), quote:'We have six units turning over in October and need a contractor who can start the first week. Are you available?'},
-      {type:'Google Drive', title:'Клиенты — Security Properties', meta:'история: 11 работ с 2025', url:'https://docs.google.com/spreadsheets/d/1ClientsBase/edit#gid=42'},
-    ],
-    versions:[{text:`Subject: Re: October unit turns — Harbor Pointe
-
-Hi Marcus,
-
-Thanks for reaching out. We can take all six unit turns in
-October. Based on our standard scope, each turn runs 4–5
-working days; we can start the first two on Oct 5.
-
-I'll send itemized estimates for each unit by Thursday.
-
-Best,
-Global Construction`, note:'первый черновик', at:'11:40'}] },
-
-  { id:'a4', dept:'mail', kind:'Письмо', t1:'Ответ на жалобу', t2:'Ally Residential · Northgate Flats #220 · потемнела затирка после работ', amt:'—',
-    to:'Priya Nair <northgate@allyres.example>',
-    sources:[
-      {type:'Gmail', title:'«Grout discoloration — Northgate Flats #220»', meta:'входящее 22.09, 12:31', url:GM('18f2e5d0c19b0220'), quote:'The resident says the grout in the shower has turned dark in spots, only three weeks after your work.'},
-      {type:'QuickBooks', title:'Счёт INV-1052 · mitigation #220', meta:'работы закончены 01.09', url:'https://app.qbo.intuit.com/app/invoice?txnId=1052'},
-    ],
-    versions:[{text:`Subject: Re: Grout discoloration — Northgate Flats #220
-
-Hi Priya,
-
-Sorry about this. Grout discoloration within the first weeks
-is covered by our workmanship warranty. We can send a tech on
-Thursday 9/24 between 9 and 11 AM to regrout and reseal at
-no charge. Does that window work for the resident?
-
-Global Construction`, note:'первый черновик', at:'12:55'}] },
+Global Construction`, note:'тестовый черновик', at:'тест'}] },
 ];
 
 let FEED = [
-  ['fin','Инвойсы: 3 напоминания готовы — INV-1041, INV-1044 (30 дн.), INV-1049 (14 дн.)','12:14'],
-  ['mail','Почта: 3 новых запроса на эстимейт переданы в «Эстимейты»','13:02'],
-  ['tech','Эстимейты: EST-2291 собран по Price Book — ждёт подтверждения','13:20'],
-  ['ops','Проекты: бригада A закончила драйвол в Cedar Ridge #214 — отчёт готов','13:24'],
-  ['comp','Документы: COI для Avenue 5 истекает 15.10 — готов запрос агенту','13:30'],
-  ['sales','Продажи: найдено 8 комплексов в Bellevue/Kirkland без постоянного подрядчика','13:28'],
-  ['design','Дизайн: слайды 1–6 рассылки №12 готовы','13:35'],
-  ['mail','Telegram-бот ответил администратору: «Бригада A на Cedar Ridge #214, день 3 из 5»','13:51'],
   ['sales',`База клиентов загружена: ${CN.clients} контактов из Google Sheet, ${CN.needs_review} требуют проверки; поставщики (${CN.vendors}) — отдельно, не для рассылок`,importedOn],
+  ['hq','Офис очищен перед запуском: осталась одна тестовая задача в «Продажах». Настоящие задачи появятся после запуска агентов','02.11'],
 ].reverse();
 
 const EXAMPLES = [
   ['sales','Найди управляющие компании в Tacoma с комплексами от 100 юнитов'],
-  ['fin','Подготовь напоминание по INV-1052, когда будет 14 дней'],
-  ['tech','Составь эстимейт на mitigation, Lakeview Commons #2A'],
+  ['fin','Подготовь напоминания по счетам с просрочкой 14+ дней'],
+  ['tech','Составь эстимейт на замену ванны по Price Book'],
   ['bids','Проверь сайт King County: новые RFQ на ремонт apartment-комплексов'],
-  ['acct','Посчитай прибыль по проектам Avenue 5 за сентябрь'],
+  ['acct','Посчитай прибыль по закрытым проектам за месяц'],
 ];
 
 const ALL = [...DEPTS, HQ, MEET, DATA];
@@ -1359,7 +1244,7 @@ function aboutHTML(d){
     ${skillsHTML(d)}
     <div class="sec"><h3>Что делает отдел</h3><ul class="skills">${d.skills.map(s=>`<li>${s}</li>`).join('')}</ul></div>
     <div class="src"><span class="eyebrow">Источники</span>${d.src}</div>
-    <p class="hint">Цифры отдела — тестовые (фаза 1); задачи и черновики — настоящие, когда подключён сервер.</p>`;
+    <p class="hint">Цифры и задачи отдела появятся после запуска агентов и подключения источников.</p>`;
 }
 /* Client base inside the Sales panel; suppliers live with Ops (purchasing), never with sales */
 function contactRows(){
@@ -1413,8 +1298,8 @@ const CAMPAIGNS = {
       + `You can see some of our recent work here: ${COLLAGE}\n\n`
       + `If you ever need a reliable contractor for an upcoming turn or repair, I'd be happy to send an estimate — just reply here or give me a call.\n\n${SIGNATURE}` },
 };
-const CAMP = (() => { try { return JSON.parse(localStorage.getItem('co-campaigns') || '{}'); } catch(_) { return {}; } })();
-const saveCamp = () => { try { localStorage.setItem('co-campaigns', JSON.stringify(CAMP)); } catch(_) {} };
+const CAMP = (() => { try { return JSON.parse(localStorage.getItem('co-campaigns-v2') || '{}'); } catch(_) { return {}; } })();
+const saveCamp = () => { try { localStorage.setItem('co-campaigns-v2', JSON.stringify(CAMP)); } catch(_) {} };
 const campEligible = kind => CONTACTS.clients.filter(c => c.status === 'ok' && c.email && CAMPAIGNS[kind].pick(c));
 const campLeft = kind => campEligible(kind).filter(c => !CAMP[`${kind}|${c.id}`]);
 function campDraft(kind, c, st){
@@ -2231,7 +2116,7 @@ document.addEventListener('click', async e => {
       ? [a.dept, `Вы: «да, отправляй» → ${a.kind.toLowerCase()} v${n} «${a.t1}» для ${a.to.split(' <')[0]} (демо: не отправлено)`, nowHM()]
       : [a.dept, `Отклонено: ${a.t1} — ${a.t2.split(' · ')[0]}`, nowHM()]);
     renderAll();
-    toast(act==='send' ? `Подтверждено: v${n}. В фазе 1 это демо — клиенту ничего не отправлено.` : 'Отклонено. Черновик снят с очереди.');
+    toast(act==='send' ? `Подтверждено: v${n}. Это тестовый офис — ничего не отправлено.` : 'Отклонено. Черновик снят с очереди.');
     return;
   }
   if (e.target.closest('#mic-task')){ if (e.detail===0) (rec ? micStop() : micStart(TASK_MIC)); return; } // keyboard toggle
