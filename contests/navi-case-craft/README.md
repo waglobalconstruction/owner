@@ -1,4 +1,24 @@
-# NAVI × CS:GO Skins — Case Craft: «Blueprint Case»
+# NAVI × CS:GO Skins — Case Craft
+
+## Основная работа: «NAVI LEGENDS CASE»
+
+Чёрный матовый кейс с золотой фурнитурой и жёлтыми ремнями. На передней панели —
+золотая «Зала славы» всех чемпионских составов NAVI:
+
+- **2010 · Triple Crown** (IEM · ESWC · Arbalet Cup) — Zeus · markeloff · Edward · starix · ceh9
+- **2021 · Stockholm Major** (без единой проигранной карты) — s1mple · electronic · Boombl4 · Perfecto · b1t
+- **2024 · Copenhagen Major** (первый мейджор CS2) — Aleksib · iM · b1t · jL · w0nderful
+- Coach B1ad3 · Icons GuardiaN · flamie · seized
+
+Плюс «LEGENDS CASE» с двумя звёздами мейджоров, «BORN TO WIN» (Natus Vincere — «рождённые побеждать»),
+«EST. 2009», медаль «2× Major Champions», наклейка NAVI и флаг Украины.
+
+| Файл | Что это |
+|---|---|
+| `navi-legends-case-template.png` | **Работа для формы** — на официальном чистом кейсе (2393×1481, прозрачный фон) |
+| `navi-legends-case-showcase.png` | Та же работа с золотым сиянием — для показа и соцсетей |
+
+## Запасной вариант: «Blueprint Case»
 
 Дизайн кейса для конкурса **Case Craft** (NAVI × CS:GO Skins).
 
@@ -34,7 +54,11 @@ node source/render.js OUT_DIR/case_clean.html blueprint-case-transparent.png 2 t
 ```bash
 python3 source/overlay.py LAYERS_DIR FONTS_DIR        # paint/spray/stickers.html
 node source/render_layers.js LAYERS_DIR               # -> paint/spray/stickers.png
-python3 -I source/recolor.py template.png OUT_DIR LAYERS_DIR   # -> OUT_DIR/final.png
+python3 -I source/recolor.py template.png OUT_DIR LAYERS_DIR   # -> OUT_DIR/final.png (Blueprint)
+
+# NAVI LEGENDS CASE:
+python3 source/overlay_legends.py LAYERS_DIR FONTS_DIR && node source/render_layers.js LAYERS_DIR
+python3 -I source/recolor.py template.png OUT_DIR LAYERS_DIR legends
 ```
 
 Корпус перекрашивается градиентной картой по яркости (фактура, царапины и блики

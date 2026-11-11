@@ -11,6 +11,7 @@ from PIL import Image, ImageDraw, ImageFilter
 
 TPL, OUT = sys.argv[1], sys.argv[2]
 OVL = sys.argv[3] if len(sys.argv) > 3 else None
+PALETTE = sys.argv[4] if len(sys.argv) > 4 else 'blueprint'
 
 im = Image.open(TPL).convert("RGBA")
 Wd, Ht = im.size
@@ -88,6 +89,14 @@ BLUE = [(0.0, (2, 8, 24)), (0.22, (6, 30, 78)), (0.5, (16, 70, 160)),
         (0.72, (32, 104, 210)), (0.88, (80, 150, 240)), (0.97, (140, 190, 250)), (1.0, (175, 210, 252))]
 SHEET = [(0.0, (2, 10, 30)), (0.25, (8, 40, 100)), (0.55, (18, 78, 172)),
          (0.8, (38, 116, 222)), (0.95, (120, 178, 248)), (1.0, (220, 236, 255))]
+BLACK = [(0.0, (3, 3, 4)), (0.3, (12, 12, 14)), (0.6, (30, 30, 34)), (0.8, (62, 62, 66)),
+         (0.93, (128, 124, 114)), (1.0, (196, 188, 168))]
+PLAQUE = [(0.0, (4, 3, 1)), (0.35, (16, 13, 6)), (0.65, (34, 29, 14)), (0.88, (72, 62, 32)), (1.0, (150, 132, 80))]
+YELLOW = [(0.0, (28, 20, 0)), (0.35, (150, 112, 0)), (0.62, (232, 186, 0)), (0.82, (255, 220, 24)), (1.0, (255, 246, 190))]
+GOLD = [(0.0, (18, 11, 2)), (0.3, (92, 60, 12)), (0.55, (176, 126, 34)), (0.75, (228, 184, 82)),
+        (0.9, (255, 228, 150)), (1.0, (255, 250, 228))]
+if PALETTE == 'legends':
+    BLUE, SHEET = BLACK, PLAQUE
 blue = gradient_map(Ln, BLUE)
 sheet_blue = gradient_map(Ln, SHEET)
 
@@ -101,6 +110,9 @@ shade = np.clip(0.18 + 1.05 * Ln, 0.12, 1.15)[..., None]
 haz = np.clip(haz_col * shade + np.clip(Ln - 0.9, 0, 1)[..., None] * 2.5, 0, 1)
 
 metal_rgb = np.clip(rgb * 0.9, 0, 1)
+if PALETTE == 'legends':
+    haz = gradient_map(np.clip(Ln * 1.05, 0, 1), YELLOW)    # solid NAVI-yellow straps
+    metal_rgb = gradient_map(Ln, GOLD)                     # gold hardware
 
 out = blue
 out = out * (1 - sheet[..., None]) + sheet_blue * sheet[..., None]
