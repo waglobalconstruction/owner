@@ -95,8 +95,13 @@ PLAQUE = [(0.0, (4, 3, 1)), (0.35, (16, 13, 6)), (0.65, (34, 29, 14)), (0.88, (7
 YELLOW = [(0.0, (28, 20, 0)), (0.35, (150, 112, 0)), (0.62, (232, 186, 0)), (0.82, (255, 220, 24)), (1.0, (255, 246, 190))]
 GOLD = [(0.0, (18, 11, 2)), (0.3, (92, 60, 12)), (0.55, (176, 126, 34)), (0.75, (228, 184, 82)),
         (0.9, (255, 228, 150)), (1.0, (255, 250, 228))]
+NEON_BODY = [(0.0, (1, 1, 2)), (0.35, (5, 5, 7)), (0.65, (14, 14, 18)), (0.85, (34, 34, 40)),
+             (0.95, (74, 74, 84)), (1.0, (140, 140, 155))]
+GUNMETAL = [(0.0, (2, 2, 3)), (0.4, (18, 19, 22)), (0.7, (48, 50, 55)), (0.9, (100, 102, 110)), (1.0, (180, 182, 192))]
 if PALETTE == 'legends':
     BLUE, SHEET = BLACK, PLAQUE
+if PALETTE == 'neon':
+    BLUE, SHEET = NEON_BODY, NEON_BODY
 blue = gradient_map(Ln, BLUE)
 sheet_blue = gradient_map(Ln, SHEET)
 
@@ -113,6 +118,9 @@ metal_rgb = np.clip(rgb * 0.9, 0, 1)
 if PALETTE == 'legends':
     haz = gradient_map(np.clip(Ln * 1.05, 0, 1), YELLOW)    # solid NAVI-yellow straps
     metal_rgb = gradient_map(Ln, GOLD)                     # gold hardware
+if PALETTE == 'neon':
+    haz = gradient_map(Ln, NEON_BODY)                      # straps stay black; neon traces their edges
+    metal_rgb = gradient_map(Ln, GUNMETAL)                 # dark gunmetal hardware
 
 out = blue
 out = out * (1 - sheet[..., None]) + sheet_blue * sheet[..., None]

@@ -1,6 +1,26 @@
 # NAVI × CS:GO Skins — Case Craft
 
-## Основная работа: «NAVI LEGENDS CASE» с фото чемпионов
+## Основная работа: «NAVI NEON CASE»
+
+Чёрный кейс, по рёбрам и граням — жёлтые неоновые трубки, из щели под крышкой и из вентиляции
+бьёт свет, будто внутри лежит легендарный дроп («дроп, який захочеться відкрити кожному»).
+Спереди — неоновая вывеска NAVI · BORN TO WIN со звёздами двух мейджоров, на боковой дверце —
+неоновый прицел и EST. 2009. Фурнитура — тёмный оружейный металл, логотип CSG○SKINS не тронут.
+
+| Файл | Что это |
+|---|---|
+| `navi-neon-case-template.png` | **Работа для формы** — на официальном чистом кейсе (2393×1481, прозрачный фон + неоновый ореол) |
+| `navi-neon-case-showcase.png` | Та же работа на тёмном фоне с отражением — для показа и соцсетей |
+
+```bash
+python3 -I source/recolor.py template.png BASE_DIR "" neon          # чёрная основа
+python3 source/neon.py svg NEON_DIR FONTS_DIR                        # + TiltNeon.ttf, Orbitron.ttf
+node source/render_layers.js NEON_DIR neon_y,neon_w
+python3 -I source/neon.py compose NEON_DIR template.png BASE_DIR/base.png
+python3 -I source/showcase_neon.py NEON_DIR/neon_final.png showcase.png
+```
+
+## Вариант: «NAVI LEGENDS CASE» с фото чемпионов
 
 Тот же чёрно-золотой кейс, но с официальными фото NAVI трёх чемпионских моментов:
 
