@@ -52,7 +52,7 @@ def engraved(x, y, text, size, family="Ops", anchor="start", fill="url(#gold)", 
 
 
 ROWS = [
-    ("2010", False, "TRIPLE CROWN", "IEM · ESWC · ARBALET CUP", "Zeus · markeloff · Edward · starix · ceh9"),
+    ("2010", False, "TRIPLE CROWN", "IEM · ESWC · WCG", "Zeus · markeloff · Edward · starix · ceh9"),
     ("2021", True, "STOCKHOLM MAJOR", "CHAMPIONS · 0 MAPS LOST", "s1mple · electronic · Boombl4 · Perfecto · b1t"),
     ("2024", True, "COPENHAGEN MAJOR", "FIRST CS2 MAJOR CHAMPIONS", "Aleksib · iM · b1t · jL · w0nderful"),
 ]

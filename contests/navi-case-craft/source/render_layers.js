@@ -4,7 +4,7 @@ const { chromium } = require('playwright');
   const dir = process.argv[2];
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 2393, height: 1481 }, deviceScaleFactor: 1 });
-  for (const name of ['paint', 'spray', 'stickers']) {
+  for (const name of (process.argv[3] || 'paint,spray,stickers').split(',')) {
     await page.goto('file://' + dir + '/' + name + '.html');
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(250);

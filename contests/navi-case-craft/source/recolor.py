@@ -137,6 +137,13 @@ if OVL:
         a = np.asarray(Image.open(f"{OVL}/{name}").convert("RGBA")).astype(np.float32) / 255.0
         return a[..., :3], a[..., 3]
 
+    # printed photos: keep them vivid but let the panel's shading and texture through a little
+    import os
+    if os.path.exists(f"{OVL}/photo.png"):
+        c, a = load("photo.png")
+        a = a * paintable
+        ph_shade = np.clip(0.62 + 0.42 * Ln, 0.55, 1.06)[..., None]
+        out = out * (1 - a[..., None]) + np.clip(c * ph_shade, 0, 1) * a[..., None]
     # painted layers follow the surface shading (darker in crevices, scratches show through)
     paint_shade = np.clip(0.30 + 0.95 * Ln, 0.25, 1.12)[..., None]
     for name, mask_to_paintable in (("paint.png", True), ("spray.png", True)):

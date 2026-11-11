@@ -1,11 +1,26 @@
 # NAVI × CS:GO Skins — Case Craft
 
-## Основная работа: «NAVI LEGENDS CASE»
+## Основная работа: «NAVI LEGENDS CASE» с фото чемпионов
+
+Тот же чёрно-золотой кейс, но с официальными фото NAVI трёх чемпионских моментов:
+
+- **спереди** — 2021, PGL Major Stockholm: s1mple поднимает трофей, рядом electronic · Boombl4 · Perfecto · b1t;
+- **на боковой дверце** — 2024, Copenhagen Major с флагами Украины: Aleksib · iM · b1t · jL · w0nderful;
+- **полароид на угловой стойке** — 2010, IEM World Championship: Zeus · markeloff · Edward · starix · ceh9.
+
+Фото: официальные баннеры истории клуба NAVI (navi.gg/en/company/history), сведены в общую золотую гамму.
+
+| Файл | Что это |
+|---|---|
+| `navi-legends-photo-template.png` | **Работа для формы** — на официальном чистом кейсе (2393×1481, прозрачный фон) |
+| `navi-legends-photo-showcase.png` | Та же работа с золотым сиянием — для показа и соцсетей |
+
+## Вариант без фото: «NAVI LEGENDS CASE» (Зала славы)
 
 Чёрный матовый кейс с золотой фурнитурой и жёлтыми ремнями. На передней панели —
 золотая «Зала славы» всех чемпионских составов NAVI:
 
-- **2010 · Triple Crown** (IEM · ESWC · Arbalet Cup) — Zeus · markeloff · Edward · starix · ceh9
+- **2010 · Triple Crown** (IEM · ESWC · WCG) — Zeus · markeloff · Edward · starix · ceh9
 - **2021 · Stockholm Major** (без единой проигранной карты) — s1mple · electronic · Boombl4 · Perfecto · b1t
 - **2024 · Copenhagen Major** (первый мейджор CS2) — Aleksib · iM · b1t · jL · w0nderful
 - Coach B1ad3 · Icons GuardiaN · flamie · seized
@@ -59,6 +74,11 @@ python3 -I source/recolor.py template.png OUT_DIR LAYERS_DIR   # -> OUT_DIR/fina
 # NAVI LEGENDS CASE:
 python3 source/overlay_legends.py LAYERS_DIR FONTS_DIR && node source/render_layers.js LAYERS_DIR
 python3 -I source/recolor.py template.png OUT_DIR LAYERS_DIR legends
+
+# NAVI LEGENDS CASE с фото (PHOTO_DIR: h2010.webp, h2021.webp, h2024.png с navi.gg/en/company/history):
+python3 source/overlay_photos.py LAYERS_DIR FONTS_DIR PHOTO_DIR && node source/render_layers.js LAYERS_DIR photo,paint,spray,stickers
+python3 -I source/recolor.py template.png OUT_DIR LAYERS_DIR legends
+python3 -I source/showcase.py OUT_DIR/final.png showcase.png
 ```
 
 Корпус перекрашивается градиентной картой по яркости (фактура, царапины и блики
