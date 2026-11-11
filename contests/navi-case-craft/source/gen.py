@@ -554,8 +554,9 @@ svg{{display:block;}}
 {svg}</body></html>"""
 
 
-rnd.seed(7)
-open(f"{OUT}/case.html", "w").write(build(True))
-rnd.seed(7)
-open(f"{OUT}/case_clean.html", "w").write(build(False))
-print("ok")
+if __name__ == "__main__":
+    rnd.seed(7)
+    open(f"{OUT}/case.html", "w").write(build(True))
+    rnd.seed(7)
+    open(f"{OUT}/case_clean.html", "w").write(build(False))
+    print("ok")
