@@ -1,6 +1,27 @@
 # NAVI × CS:GO Skins — Case Craft
 
-## Основная работа: «NAVI UNLEASHED»
+## Основная работа: «NAVI SEALED»
+
+Легендарный дроп запечатан — но его не удержать. Кейс крест-накрест обмотан стальными цепями,
+на пересечении — массивный замок с золотой «NAVI» и светящейся замочной скважиной; звенья у замка
+раскалены. Из-под замка по всему корпусу расходятся раскалённые трещины, из щели крышки и вентиляции
+бьёт свет, летят искры и молнии. На крышке — «НЕ ВІДКРИВАТИ / DO NOT OPEN» (обратная психология:
+именно его и хочется открыть). В витрине — игровой интерфейс: CONTAINMENT BREACH, ENERGY 999%,
+★ LEGENDARY DROP ★, DROP CHANCE 0.26%.
+
+| Файл | Что это |
+|---|---|
+| `navi-sealed-template.png` | **Работа для формы** — на официальном чистом кейсе (2393×1481, прозрачный фон + свечение) |
+| `navi-sealed-showcase.png` | Та же работа в сцене с лучами, дымом и интерфейсом — для показа и соцсетей |
+
+```bash
+python3 -I source/recolor.py template.png BASE_DIR "" neon
+python3 source/sealed_svg.py OUT_DIR FONTS_DIR            # + RussoOne.ttf, Orbitron.ttf, BlackOpsOne.ttf
+node source/render_layers.js OUT_DIR chains,emit,stencil && VIEW=2793x2031 node source/render_layers.js OUT_DIR hud
+python3 -I source/sealed.py template.png BASE_DIR FONTS_DIR OUT_DIR
+```
+
+## Вариант: «NAVI UNLEASHED»
 
 Кейс не выдерживает силы внутри: из разломов по всему корпусу бьёт раскалённый жёлто-оранжевый свет,
 в центре — выжженная пылающая «NAVI», из щели крышки и вентиляции рвётся свет, летят искры,
